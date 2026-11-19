@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { lastUserPrompt, AdapterConfigurationError } from "../adapters/shared/base-adapter.js";
-import { GroqAdapter } from "../adapters/groq/index.js";
+import { GroqAdapter, resolveGroqModel } from "../adapters/groq/index.js";
 import { GeminiAdapter } from "../adapters/gemini/index.js";
 import { PollinationsImageAdapter } from "../adapters/pollinations/index.js";
 
@@ -24,6 +24,17 @@ test("provider adapters expose implemented capabilities", () => {
   assert.deepEqual(new GeminiAdapter().capabilities, ["chat"]);
   assert.equal(new PollinationsImageAdapter().id, "pollinations-image");
   assert.deepEqual(new PollinationsImageAdapter().capabilities, ["image"]);
+});
+
+test("Groq aliases resolve to defaults and allow per-alias overrides", () => {
+  const previous = process.env.GROQ_MODEL_FAST;
+  delete process.env.GROQ_MODEL_FAST;
+  assert.equal(resolveGroqModel("auto"), "llama-3.3-70b-versatile");
+  assert.equal(resolveGroqModel("cheap"), "llama-3.1-8b-instant");
+  process.env.GROQ_MODEL_FAST = "custom-fast-model";
+  assert.equal(resolveGroqModel("fast"), "custom-fast-model");
+  if (previous === undefined) delete process.env.GROQ_MODEL_FAST;
+  else process.env.GROQ_MODEL_FAST = previous;
 });
 
 test("Pollinations is opt-in by default", async () => {
