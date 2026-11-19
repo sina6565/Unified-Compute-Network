@@ -1,0 +1,13 @@
+{
+  "name": "@ucn/gateway",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "start": "node --experimental-strip-types src/index.ts"
+  },
+  "dependencies": {
+    "fastify": "^5.2.1"
+  }
+}
