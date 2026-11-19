@@ -26,13 +26,6 @@ Client / Agent -> Gateway -> Capability Router -> Provider Registry
                                       v
                               Metering / Usage record
 ```
-این معماری هدف است؛ همهٔ اجزا هنوز پیاده‌سازی نشده‌اند.
-
-## CC و اقتصاد
-Compute Credit (CC) فعلاً یک مفهوم پیشنهادی برای واحد حسابداری داخلی مصرف است؛ نه توکن بلاک‌چینی، سپرده یا دارایی قابل معامله. نرخ ۱۰۰ CC = ۱ USD، کارمزد ۲٪، تقسیم درآمد و بازده LP صرفاً فرض‌ها و پیشنهادهای نیازمند RFC و تصویب‌اند. هیچ درآمد یا APY تضمین نمی‌شود. جزئیات: [ECONOMICS.md](ECONOMICS.md).
-
-## حکمرانی
-پیشنهادها از طریق GitHub Issues مطرح و در RFC بررسی می‌شوند. تا زمان تصویب قواعد رأی‌گیری و پیاده‌سازی سامانهٔ رأی، کامنت‌ها و واکنش‌های GitHub رأی الزام‌آور نیستند. جزئیات: [GOVERNANCE.md](GOVERNANCE.md).
 
 ## وضعیت واقعی قابلیت‌ها
 | حوزه | وضعیت |
@@ -40,12 +33,29 @@ Compute Credit (CC) فعلاً یک مفهوم پیشنهادی برای واح�
 | Adapter contract | پیاده‌سازی اولیه |
 | Groq / Gemini / Pollinations | آداپتر اولیه؛ opt-in |
 | OpenRouter / Hugging Face / Together / Anthropic | آداپتر chat اولیه؛ opt-in |
-| Provider Registry | کاتالوگ اولیه |
-| Gateway و Router | هنوز اجرایی نیست |
+| Fastify Gateway | پیاده‌سازی اولیه؛ نیازمند تست integration و hardening |
+| Provider Registry و explicit routing | پیاده‌سازی اولیه در gateway |
+| Streaming passthrough | هنوز فعال نیست |
 | NCU و Metering | طراحی |
 | AMM / Pools / LP | طراحی |
 | Governance و Billing | هنوز اجرایی نیست |
 | Web dashboard و Smart contracts | فاز آینده |
+
+## اجرای Gateway اولیه
+Node.js 22+ و pnpm 9+ لازم است. ابتدا `UCN_API_KEY` و کلید حداقل یک Provider را در محیط تنظیم کنید.
+
+```bash
+pnpm install
+pnpm --filter @ucn/gateway dev
+```
+
+مسیرهای اولیه: `GET /health`، `GET /v1/providers` و `POST /v1/chat/completions`. درخواست API نیازمند `Authorization: Bearer <UCN_API_KEY>` است. اگر چند Provider پیکربندی شده باشند، کلاینت باید فیلد `provider` را مشخص کند؛ انتخاب خودکار قیمت هنوز پیاده‌سازی نشده است. Streaming در این نسخه پاسخ 501 می‌دهد.
+
+## CC و اقتصاد
+Compute Credit (CC) فعلاً یک مفهوم پیشنهادی برای واحد حسابداری داخلی مصرف است؛ نه توکن بلاک‌چینی، سپرده یا دارایی قابل معامله. نرخ ۱۰۰ CC = ۱ USD، کارمزد ۲٪، تقسیم درآمد و بازده LP صرفاً فرض‌ها و پیشنهادهای نیازمند RFC و تصویب‌اند. هیچ درآمد یا APY تضمین نمی‌شود. جزئیات: [ECONOMICS.md](ECONOMICS.md).
+
+## حکمرانی
+پیشنهادها از طریق GitHub Issues مطرح و در RFC بررسی می‌شوند. تا زمان تصویب قواعد رأی‌گیری و پیاده‌سازی سامانهٔ رأی، کامنت‌ها و واکنش‌های GitHub رأی الزام‌آور نیستند. جزئیات: [GOVERNANCE.md](GOVERNANCE.md).
 
 ## مشارکت
 - [فرم درخواست Provider](.github/ISSUE_TEMPLATE/provider_application.md)
