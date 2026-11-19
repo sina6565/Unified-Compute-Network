@@ -4,7 +4,8 @@ const DEFAULT_BASE_URL = "https://generativelanguage.googleapis.com/v1beta";
 
 export class GeminiAdapter implements ProviderAdapter {
   readonly id = "gemini";
-  readonly capabilities = ["chat", "vision"] as const;
+  // This first slice sends text prompts only. Vision requires a typed parts/input contract.
+  readonly capabilities = ["chat"] as const;
 
   async forward(request: NormalizedRequest): Promise<Response> {
     const apiKey = requireEnv("GEMINI_API_KEY");
@@ -13,10 +14,14 @@ export class GeminiAdapter implements ProviderAdapter {
 
     const prompt = lastUserPrompt(request);
     const baseUrl = (process.env.GEMINI_BASE_URL || DEFAULT_BASE_URL).replace(/\/$/, "");
-    const contents = [{ role: "user", parts: [{ text: prompt }] }];
     const body = {
-      contents,
-      ...(request.temperature !== undefined ? { generationConfig: { temperature: request.temperature, ...(request.max_tokens !== undefined ? { maxOutputTokens: request.max_tokens } : {}) } } : request.max_tokens !== undefined ? { generationConfig: { maxOutputTokens: request.max_tokens } } : {})
+      contents: [{ role: "user", parts: [{ text: prompt }] }],
+      ...(request.temperature !== undefined || request.max_tokens !== undefined
+        ? { generationConfig: {
+            ...(request.temperature !== undefined ? { temperature: request.temperature } : {}),
+            ...(request.max_tokens !== undefined ? { maxOutputTokens: request.max_tokens } : {})
+          } }
+        : {})
     };
 
     return fetch(`${baseUrl}/models/${encodeURIComponent(model)}:generateContent`, {

@@ -22,7 +22,7 @@ providers:
     adapter: adapters/gemini
     status: implemented
     enabled: false
-    capabilities: [chat, vision]
+    capabilities: [chat]
     endpoint: https://generativelanguage.googleapis.com/v1beta
     auth: x-goog-api-key
     credential_ref: env:GEMINI_API_KEY
@@ -89,4 +89,4 @@ providers:
     status: retired
     enabled: false
     capabilities: []
-    reason: Removed from the active provider plan; no fingerprint impersonation or undocumented public endpoint.
+    reason: Removed from active UCN plan by project decision; no fingerprint impersonation or undocumented public endpoint.
