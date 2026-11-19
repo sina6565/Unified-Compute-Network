@@ -1,6 +1,5 @@
 import Fastify, { type FastifyInstance } from "fastify";
 import { timingSafeEqual } from "node:crypto";
-import { Readable } from "node:stream";
 import type { NormalizedRequest } from "../../../adapters/shared/base-adapter.js";
 import { createConfiguredRegistry } from "./provider-registry.js";
 import { ProviderRouter, ProviderSelectionError } from "./router.js";
@@ -39,7 +38,7 @@ export function buildServer(): FastifyInstance {
     if (!body || !Array.isArray(body.messages) || body.messages.length === 0) {
       return reply.code(400).send({ error: { message: "messages must be a non-empty array", type: "invalid_request_error" } });
     }
-    if (body.stream && body.stream !== false) {
+    if (body.stream === true) {
       return reply.code(501).send({ error: { message: "Streaming passthrough is not enabled in this gateway release", type: "not_implemented" } });
     }
 
