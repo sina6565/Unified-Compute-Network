@@ -17,12 +17,13 @@ test("lastUserPrompt rejects an empty request", () => {
   assert.throws(() => lastUserPrompt({ messages: [] }), AdapterConfigurationError);
 });
 
-test("provider adapters expose isolated IDs and capabilities", () => {
+test("provider adapters expose implemented capabilities", () => {
   assert.equal(new GroqAdapter().id, "groq");
   assert.deepEqual(new GroqAdapter().capabilities, ["chat"]);
   assert.equal(new GeminiAdapter().id, "gemini");
-  assert.deepEqual(new GeminiAdapter().capabilities, ["chat", "vision"]);
+  assert.deepEqual(new GeminiAdapter().capabilities, ["chat"]);
   assert.equal(new PollinationsImageAdapter().id, "pollinations-image");
+  assert.deepEqual(new PollinationsImageAdapter().capabilities, ["image"]);
 });
 
 test("Pollinations is opt-in by default", async () => {
