@@ -39,6 +39,7 @@ Compute Credit (CC) فعلاً یک مفهوم پیشنهادی برای واح�
 |---|---|
 | Adapter contract | پیاده‌سازی اولیه |
 | Groq / Gemini / Pollinations | آداپتر اولیه؛ opt-in |
+| OpenRouter / Hugging Face / Together / Anthropic | آداپتر chat اولیه؛ opt-in |
 | Provider Registry | کاتالوگ اولیه |
 | Gateway و Router | هنوز اجرایی نیست |
 | NCU و Metering | طراحی |
