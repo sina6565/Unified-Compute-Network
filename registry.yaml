@@ -1,0 +1,92 @@
+version: 1
+policy:
+  default_enabled: false
+  require_explicit_opt_in: true
+  require_commercial_terms_review: true
+  forbid_client_fingerprint_impersonation: true
+
+providers:
+  - id: groq
+    adapter: adapters/groq
+    status: implemented
+    enabled: false
+    capabilities: [chat]
+    endpoint: https://api.groq.com/openai/v1
+    auth: bearer
+    credential_ref: env:GROQ_API_KEY
+    model_ref: env:GROQ_MODEL
+    pricing: verify-current-account-and-model
+    commercial_use: verify-current-terms
+
+  - id: gemini
+    adapter: adapters/gemini
+    status: implemented
+    enabled: false
+    capabilities: [chat, vision]
+    endpoint: https://generativelanguage.googleapis.com/v1beta
+    auth: x-goog-api-key
+    credential_ref: env:GEMINI_API_KEY
+    model_ref: env:GEMINI_MODEL
+    pricing: verify-current-model-and-region
+    commercial_use: verify-current-terms
+
+  - id: pollinations-image
+    adapter: adapters/pollinations
+    status: implemented-opt-in
+    enabled: false
+    capabilities: [image]
+    endpoint: https://image.pollinations.ai/prompt
+    auth: none-configurable
+    model_ref: env:POLLINATIONS_IMAGE_MODEL
+    pricing: public-endpoint-not-guaranteed-free
+    commercial_use: verify-current-terms
+
+  - id: openrouter
+    adapter: planned
+    status: catalog-only
+    enabled: false
+    capabilities: [chat, vision]
+    endpoint: https://openrouter.ai/api/v1
+    auth: bearer
+    credential_ref: env:OPENROUTER_API_KEY
+    pricing: per-model-verify-current-catalog
+    commercial_use: verify-current-terms
+
+  - id: huggingface
+    adapter: planned
+    status: catalog-only
+    enabled: false
+    capabilities: [chat, image, audio]
+    endpoint: https://router.huggingface.co
+    auth: bearer
+    credential_ref: env:HF_TOKEN
+    pricing: model-and-account-specific
+    commercial_use: verify-model-license-and-terms
+
+  - id: together
+    adapter: planned
+    status: catalog-only
+    enabled: false
+    capabilities: [chat, image, video]
+    endpoint: https://api.together.xyz/v1
+    auth: bearer
+    credential_ref: env:TOGETHER_API_KEY
+    pricing: verify-current-pricing
+    commercial_use: verify-current-terms
+
+  - id: anthropic
+    adapter: planned
+    status: catalog-only
+    enabled: false
+    capabilities: [chat, vision]
+    endpoint: https://api.anthropic.com/v1
+    auth: x-api-key
+    credential_ref: env:ANTHROPIC_API_KEY
+    pricing: verify-current-pricing
+    commercial_use: verify-current-terms
+
+  - id: opencode-zen
+    status: retired
+    enabled: false
+    capabilities: []
+    reason: Removed from the active provider plan; no fingerprint impersonation or undocumented public endpoint.
