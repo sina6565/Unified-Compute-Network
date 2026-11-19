@@ -1,34 +1,74 @@
-# Unified Compute Network (UCN)
+<div align="center">
 
-Provider-neutral compute routing and settlement research project.
+# 🌐 Unified Compute Network
+### یک شبکهٔ عمومی برای اتصال کاربران، Agentها و تأمین‌کنندگان ظرفیت محاسباتی
+**One Network. Open Participation. Transparent Coordination.**
 
-## Current scope
+[Architecture](docs/architecture/overview.md) · [Roadmap](ROADMAP.md) · [Governance](GOVERNANCE.md) · [Economics](ECONOMICS.md) · [Contributing](CONTRIBUTING.md)
 
-This repository is an independent project. It is not part of SINA AI STUDIO and must not be coupled to that product's runtime or release process.
+</div>
 
-The first implementation slice establishes:
-- a small provider-neutral adapter contract;
-- opt-in Groq chat and Gemini generate-content adapters;
-- a Pollinations image adapter behind explicit configuration;
-- a provider registry catalog that distinguishes implementation status from pricing, quota, and commercial-use verification.
+## چشم‌انداز
+Unified Compute Network (UCN) زیرساختی provider-neutral برای اتصال کاربران و توسعه‌دهندگان به ظرفیت محاسباتی و قابلیت‌های هوش مصنوعی ارائه‌دهندگان مستقل است. این پروژه مستقل است و جزئی از SINA AI STUDIO نیست.
 
-## Important operating rules
+## مشارکت‌کنندگان
+- **کاربران و توسعه‌دهندگان:** ثبت درخواست، انتخاب Provider و مشاهدهٔ مصرف.
+- **ارائه‌دهندگان:** عرضهٔ API، مدل یا ظرفیت از طریق Adapter استاندارد.
+- **مشارکت‌کنندگان و LPهای آینده:** مشارکت در توسعه، طراحی اقتصاد و حکمرانی. سازوکار مالی هنوز تصویب یا عملیاتی نشده است.
 
-1. Never assume a provider's free tier is unlimited, stable, or commercially sublicensable.
-2. Do not emulate official clients, spoof TLS fingerprints, or bypass upstream access controls.
-3. Credentials are read from environment variables and must never be committed.
-4. Providers are opt-in. Missing credentials or disabled providers must fail clearly, not silently route to a paid service.
-5. Provider model IDs and endpoints are configuration, not permanent constants.
-6. A modality listed in the catalog is not proof that the adapter implements that modality.
+## مسیر درخواست
+```text
+Client / Agent -> Gateway -> Capability Router -> Provider Registry
+                                      |
+                                      v
+                                Provider Adapter -> Upstream
+                                      |
+                                      v
+                              Metering / Usage record
+```
 
-## Development
+## وضعیت واقعی قابلیت‌ها
+| حوزه | وضعیت |
+|---|---|
+| Adapter contract | پیاده‌سازی اولیه |
+| Groq / Gemini / Pollinations | آداپتر اولیه؛ opt-in |
+| OpenRouter / Hugging Face / Together / Anthropic | آداپتر chat اولیه؛ opt-in |
+| Fastify Gateway | پیاده‌سازی اولیه؛ نیازمند تست integration و hardening |
+| Provider Registry و explicit routing | پیاده‌سازی اولیه در gateway |
+| Streaming passthrough | هنوز فعال نیست |
+| NCU و Metering | طراحی |
+| AMM / Pools / LP | طراحی |
+| Governance و Billing | هنوز اجرایی نیست |
+| Web dashboard و Smart contracts | فاز آینده |
 
-Requires Node.js 22+ and pnpm 9+.
+## اجرای Gateway اولیه
+Node.js 22+ و pnpm 9+ لازم است. ابتدا `UCN_API_KEY` و کلید حداقل یک Provider را در محیط تنظیم کنید.
 
 ```bash
 pnpm install
-pnpm test
-pnpm typecheck
+pnpm --filter @ucn/gateway dev
 ```
 
-See [provider status and validation](docs/PROVIDER_STATUS.md) and [architecture](docs/ARCHITECTURE.md).
+مسیرهای اولیه: `GET /health`، `GET /v1/providers` و `POST /v1/chat/completions`. درخواست API نیازمند `Authorization: Bearer <UCN_API_KEY>` است. اگر چند Provider پیکربندی شده باشند، کلاینت باید فیلد `provider` را مشخص کند؛ انتخاب خودکار قیمت هنوز پیاده‌سازی نشده است. Streaming در این نسخه پاسخ 501 می‌دهد.
+
+## CC و اقتصاد
+Compute Credit (CC) فعلاً یک مفهوم پیشنهادی برای واحد حسابداری داخلی مصرف است؛ نه توکن بلاک‌چینی، سپرده یا دارایی قابل معامله. نرخ ۱۰۰ CC = ۱ USD، کارمزد ۲٪، تقسیم درآمد و بازده LP صرفاً فرض‌ها و پیشنهادهای نیازمند RFC و تصویب‌اند. هیچ درآمد یا APY تضمین نمی‌شود. جزئیات: [ECONOMICS.md](ECONOMICS.md).
+
+## حکمرانی
+پیشنهادها از طریق GitHub Issues مطرح و در RFC بررسی می‌شوند. تا زمان تصویب قواعد رأی‌گیری و پیاده‌سازی سامانهٔ رأی، کامنت‌ها و واکنش‌های GitHub رأی الزام‌آور نیستند. جزئیات: [GOVERNANCE.md](GOVERNANCE.md).
+
+## مشارکت
+- [فرم درخواست Provider](.github/ISSUE_TEMPLATE/provider_application.md)
+- [فرم پیشنهاد حکمرانی](.github/ISSUE_TEMPLATE/governance_proposal.md)
+- [CONTRIBUTING.md](CONTRIBUTING.md) و [ROADMAP.md](ROADMAP.md)
+
+## اصول
+1. استقلال از Provider و امکان مشارکت آزاد.
+2. Providerها ابتدا opt-in و با وضعیت مستند.
+3. قیمت، سهمیه، مدل و مجوز تجاری باید از منبع رسمی بررسی شوند.
+4. اسرار هرگز commit نشوند.
+5. قابلیت اعلام‌شده باید در کد و تست وجود داشته باشد.
+6. جعل هویت کلاینت یا دور زدن کنترل upstream بخشی از طراحی نیست.
+7. هسته و حسابداری باید قابل ممیزی باشند.
+
+مجوز: [LICENSE](LICENSE) موجود در مخزن.

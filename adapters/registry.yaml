@@ -1,0 +1,3 @@
+# Canonical provider catalog remains at repository root for backward compatibility.
+version: 1
+source: ../registry.yaml
