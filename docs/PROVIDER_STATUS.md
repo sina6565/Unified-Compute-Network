@@ -1,32 +1,32 @@
 # Provider status and validation
 
-Status is deliberately conservative. Availability, free quotas, model names, and commercial-use rights change frequently and must be verified against current first-party terms before production activation.
+وضعیت محافظه‌کارانه است. نام مدل، سهمیه، دسترسی، قیمت و مجوز تجاری باید پیش از فعال‌سازی از مستندات رسمی همان زمان بررسی شوند.
 
-| Provider | Adapter in this repository | Initial capability | Pricing/quota status | Commercial-use status |
-|---|---|---|---|---|
-| Groq | Implemented (opt-in) | Chat completions | Account/model limits must be checked | Verify current terms |
-| Google Gemini API | Implemented (opt-in) | Text generation | Free quota varies by model, region, and account | Verify current terms |
-| Pollinations | Implemented (opt-in) | Image URL request | Public endpoint availability/limits are not guaranteed | Verify current terms |
-| OpenRouter | Catalog only | Planned chat/vision routing | Per-model; some models may be free | Verify model and terms |
-| Hugging Face | Catalog only | Planned inference | Provider/model-specific quotas | Verify model and terms |
-| Together AI | Catalog only | Planned model APIs | Treat as paid unless current terms prove otherwise | Verify model and terms |
-| Anthropic | Catalog only | Planned Messages API adapter | Paid unless current terms prove otherwise | Verify current terms |
-| OpenCode Zen | Retired from active UCN plan (user-directed) | None | Do not rely on the claimed public/free endpoint | Not verified |
+| Provider | وضعیت Adapter | Capability پیاده‌سازی‌شده | وضعیت قیمت/سهمیه |
+|---|---|---|---|
+| Groq | Implemented, opt-in | chat | وابسته به مدل و حساب |
+| Google Gemini API | Implemented, opt-in | chat متنی | وابسته به مدل، منطقه و حساب |
+| Pollinations | Implemented, opt-in | image URL | پایداری/رایگان‌بودن تضمین نیست |
+| OpenRouter | Implemented, opt-in | chat | مدل‌به‌مدل؛ برخی مدل‌ها ممکن است free باشند |
+| Hugging Face Inference Router | Implemented, opt-in | chat از مسیر OpenAI-compatible | مدل و حساب‌محور |
+| Together AI | Implemented, opt-in | chat | قیمت‌گذاری جاری باید بررسی شود |
+| Anthropic | Implemented, opt-in | chat از Messages API | قیمت‌گذاری جاری باید بررسی شود |
+| OpenCode Zen | Retired from active UCN plan | None | در مسیر فعال استفاده نمی‌شود |
 
-## Important corrections to the proposal
+## محدودهٔ دقیق پیاده‌سازی
+- آداپترهای OpenRouter، Hugging Face و Together در این مرحله فقط chat completion متنی را پشتیبانی می‌کنند؛ catalogهای upstream ممکن است modalityهای بیشتری داشته باشند، اما این adapterها آن‌ها را اعلام نمی‌کنند.
+- Anthropic از Messages API استفاده می‌کند؛ ACP bridge در این مخزن پیاده‌سازی نشده است.
+- Gemini از API بومی `generateContent` و فقط prompt متنی استفاده می‌کند.
+- Pollinations خروجی endpoint تصویر را به شکل Response برمی‌گرداند؛ OpenAI image JSON فرض نمی‌شود.
+- OpenCode Zen از مسیر فعال UCN کنار گذاشته شده است. هیچ TLS fingerprint یا هدر جعل‌شده‌ای اضافه نشده است.
 
-- A free developer tier does not automatically grant resale, sublicensing, or commercial API aggregation rights.
-- Groq model IDs are not hardcoded to potentially retired examples. Configure `GROQ_MODEL` from the current official model catalog.
-- Gemini uses its native `generateContent` API shape here; the current adapter accepts text prompts only. It is not falsely represented as an OpenAI-compatible endpoint or as image-capable.
-- Pollinations image generation is treated as an external URL response, not an OpenAI image JSON response. Its public availability and terms need separate validation.
-- A provider returning HTTP 200 in one manual test does not establish uptime, quota, throughput, or commercial suitability.
+## فعال‌سازی
+همهٔ Providerها در registry غیرفعال‌اند و فقط با credential و تنظیمات صریح فعال می‌شوند. پیش از فعال‌سازی:
+1. مستندات و endpoint رسمی را بررسی کنید.
+2. مدل و modality را بررسی کنید.
+3. quota، rate limit، منطقه و شرایط حساب را بررسی کنید.
+4. شرایط تجاری، بازتوزیع و ارائهٔ سرویس به اشخاص ثالث را بررسی کنید.
+5. timeout، retry/backoff، محدودیت اندازه، observability و کنترل هزینه اضافه/تأیید کنید.
+6. تست قراردادی را با کلید مجاز اجرا کنید؛ کلید را commit نکنید.
 
-## Activation checklist
-
-Before enabling any provider for users:
-1. Verify current official API documentation and endpoint.
-2. Verify model ID and modality support.
-3. Verify quota, rate limits, geographic restrictions, and account requirements.
-4. Verify terms for commercial use, redistribution, and serving third-party users.
-5. Add timeout, retry/backoff, request-size limits, observability, and cost controls.
-6. Run contract tests using an authorized key; do not commit the key.
+وجود Adapter به معنی health، uptime، سهمیهٔ رایگان یا مجوز تجاری تأییدشده نیست.
