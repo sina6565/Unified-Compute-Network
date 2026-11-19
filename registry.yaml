@@ -42,46 +42,50 @@ providers:
     commercial_use: verify-current-terms
 
   - id: openrouter
-    adapter: planned
-    status: catalog-only
+    adapter: adapters/openrouter
+    status: implemented-opt-in
     enabled: false
-    capabilities: [chat, vision]
+    capabilities: [chat]
     endpoint: https://openrouter.ai/api/v1
     auth: bearer
     credential_ref: env:OPENROUTER_API_KEY
+    model_ref: env:OPENROUTER_MODEL
     pricing: per-model-verify-current-catalog
     commercial_use: verify-current-terms
 
   - id: huggingface
-    adapter: planned
-    status: catalog-only
+    adapter: adapters/huggingface
+    status: implemented-opt-in
     enabled: false
-    capabilities: [chat, image, audio]
-    endpoint: https://router.huggingface.co
+    capabilities: [chat]
+    endpoint: https://router.huggingface.co/v1
     auth: bearer
     credential_ref: env:HF_TOKEN
+    model_ref: env:HF_MODEL
     pricing: model-and-account-specific
     commercial_use: verify-model-license-and-terms
 
   - id: together
-    adapter: planned
-    status: catalog-only
+    adapter: adapters/together
+    status: implemented-opt-in
     enabled: false
-    capabilities: [chat, image, video]
+    capabilities: [chat]
     endpoint: https://api.together.xyz/v1
     auth: bearer
     credential_ref: env:TOGETHER_API_KEY
+    model_ref: env:TOGETHER_MODEL
     pricing: verify-current-pricing
     commercial_use: verify-current-terms
 
   - id: anthropic
-    adapter: planned
-    status: catalog-only
+    adapter: adapters/anthropic
+    status: implemented-opt-in
     enabled: false
-    capabilities: [chat, vision]
+    capabilities: [chat]
     endpoint: https://api.anthropic.com/v1
     auth: x-api-key
     credential_ref: env:ANTHROPIC_API_KEY
+    model_ref: env:ANTHROPIC_MODEL
     pricing: verify-current-pricing
     commercial_use: verify-current-terms
 
@@ -89,4 +93,4 @@ providers:
     status: retired
     enabled: false
     capabilities: []
-    reason: Removed from active UCN plan by project decision; no fingerprint impersonation or undocumented public endpoint.
+    reason: Removed from active UCN plan; no fingerprint impersonation or undocumented public endpoint.
