@@ -5,6 +5,7 @@ export interface CompatibleProviderConfig {
   baseUrl: string;
   apiKeyEnv?: string;
   modelEnv: string;
+  visionModelEnv?: string;
   baseUrlEnv?: string;
   capabilities?: readonly ("chat" | "vision")[];
   allowNoKey?: boolean;
@@ -19,7 +20,9 @@ export class OpenAICompatibleAdapter implements ProviderAdapter {
   }
 
   async forward(request: NormalizedRequest): Promise<Response> {
-    const model = request.model?.trim() || process.env[this.config.modelEnv]?.trim();
+    const hasImage = request.messages?.some((message) => Array.isArray(message.content) && message.content.some((part) => part.type === "image_url"));
+    const configuredModel = hasImage && this.config.visionModelEnv ? process.env[this.config.visionModelEnv] : process.env[this.config.modelEnv];
+    const model = request.model?.trim() || configuredModel?.trim();
     if (!model) throw new AdapterConfigurationError(`Set request.model or ${this.config.modelEnv}`);
     if (!request.messages?.length) throw new AdapterConfigurationError("Chat requires messages");
     const apiKey = this.config.apiKeyEnv ? requireEnv(this.config.apiKeyEnv) : "";
