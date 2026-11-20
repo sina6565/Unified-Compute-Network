@@ -124,7 +124,7 @@ providers:
     auth: bearer
     credential_ref: env:OPENROUTER_API_KEY
     model_ref: env:OPENROUTER_IMAGE_MODEL
-    pricing: paid-unless-current-zero-price-endpoint-proven
+    pricing: free-rate-limited-temporary-remove-2026-11-28
     commercial_use: verify-current-terms
   - id: opencode
     status: deferred
