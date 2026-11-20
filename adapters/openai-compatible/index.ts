@@ -5,6 +5,7 @@ export interface CompatibleProviderConfig {
   baseUrl: string;
   apiKeyEnv?: string;
   modelEnv: string;
+  baseUrlEnv?: string;
   capabilities?: readonly ("chat" | "vision")[];
   allowNoKey?: boolean;
 }
@@ -23,7 +24,7 @@ export class OpenAICompatibleAdapter implements ProviderAdapter {
     if (!request.messages?.length) throw new AdapterConfigurationError("Chat requires messages");
     const apiKey = this.config.apiKeyEnv ? requireEnv(this.config.apiKeyEnv) : "";
     if (!apiKey && !this.config.allowNoKey) throw new AdapterConfigurationError("Provider API key is required");
-    return fetch(`${(process.env[`${this.id.toUpperCase().replace(/-/g, "_")}_BASE_URL`] || this.config.baseUrl).replace(/\/$/, "")}/chat/completions`, {
+    return fetch(`${((this.config.baseUrlEnv ? process.env[this.config.baseUrlEnv] : undefined) || this.config.baseUrl).replace(/\/$/, "")}/chat/completions`, {
       method: "POST",
       headers: { ...(apiKey ? { authorization: `Bearer ${apiKey}` } : {}), "content-type": "application/json",
         accept: request.stream ? "text/event-stream" : "application/json" },
