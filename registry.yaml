@@ -1,35 +1,34 @@
-version: 1
+version: 2
 policy:
   default_enabled: false
   require_explicit_opt_in: true
   require_commercial_terms_review: true
   forbid_client_fingerprint_impersonation: true
+  free_tier_must_be_verified_at_runtime: true
 
 providers:
   - id: groq
     adapter: adapters/groq
     status: implemented
     enabled: false
-    capabilities: [chat]
+    capabilities: [chat, vision]
     endpoint: https://api.groq.com/openai/v1
     auth: bearer
     credential_ref: env:GROQ_API_KEY
     model_ref: env:GROQ_MODEL
     pricing: verify-current-account-and-model
     commercial_use: verify-current-terms
-
   - id: gemini
     adapter: adapters/gemini
     status: implemented
     enabled: false
-    capabilities: [chat]
+    capabilities: [chat, vision]
     endpoint: https://generativelanguage.googleapis.com/v1beta
     auth: x-goog-api-key
     credential_ref: env:GEMINI_API_KEY
     model_ref: env:GEMINI_MODEL
     pricing: verify-current-model-and-region
     commercial_use: verify-current-terms
-
   - id: pollinations-image
     adapter: adapters/pollinations
     status: implemented-opt-in
@@ -40,53 +39,100 @@ providers:
     model_ref: env:POLLINATIONS_IMAGE_MODEL
     pricing: public-endpoint-not-guaranteed-free
     commercial_use: verify-current-terms
-
   - id: openrouter
-    adapter: planned
-    status: catalog-only
+    adapter: adapters/openai-compatible/providers.ts
+    status: implemented
     enabled: false
     capabilities: [chat, vision]
     endpoint: https://openrouter.ai/api/v1
     auth: bearer
     credential_ref: env:OPENROUTER_API_KEY
-    pricing: per-model-verify-current-catalog
+    model_ref: env:OPENROUTER_MODEL
+    pricing: free-models-dynamic-and-rate-limited
     commercial_use: verify-current-terms
-
-  - id: huggingface
-    adapter: planned
-    status: catalog-only
-    enabled: false
-    capabilities: [chat, image, audio]
-    endpoint: https://router.huggingface.co
-    auth: bearer
-    credential_ref: env:HF_TOKEN
-    pricing: model-and-account-specific
-    commercial_use: verify-model-license-and-terms
-
-  - id: together
-    adapter: planned
-    status: catalog-only
-    enabled: false
-    capabilities: [chat, image, video]
-    endpoint: https://api.together.xyz/v1
-    auth: bearer
-    credential_ref: env:TOGETHER_API_KEY
-    pricing: verify-current-pricing
-    commercial_use: verify-current-terms
-
-  - id: anthropic
-    adapter: planned
-    status: catalog-only
+  - id: mistral
+    adapter: adapters/openai-compatible/providers.ts
+    status: implemented
     enabled: false
     capabilities: [chat, vision]
-    endpoint: https://api.anthropic.com/v1
-    auth: x-api-key
-    credential_ref: env:ANTHROPIC_API_KEY
-    pricing: verify-current-pricing
+    endpoint: https://api.mistral.ai/v1
+    auth: bearer
+    credential_ref: env:MISTRAL_API_KEY
+    model_ref: env:MISTRAL_MODEL
+    pricing: account-and-model-dependent
     commercial_use: verify-current-terms
-
-  - id: opencode-zen
-    status: retired
+  - id: cerebras
+    adapter: adapters/openai-compatible/providers.ts
+    status: implemented
+    enabled: false
+    capabilities: [chat]
+    endpoint: https://api.cerebras.ai/v1
+    auth: bearer
+    credential_ref: env:CEREBRAS_API_KEY
+    model_ref: env:CEREBRAS_MODEL
+    pricing: verify-current-account-and-model
+    commercial_use: verify-current-terms
+  - id: sambanova
+    adapter: adapters/openai-compatible/providers.ts
+    status: implemented
+    enabled: false
+    capabilities: [chat, vision]
+    endpoint: https://api.sambanova.ai/v1
+    auth: bearer
+    credential_ref: env:SAMBANOVA_API_KEY
+    model_ref: env:SAMBANOVA_MODEL
+    pricing: verify-current-account-and-model
+    commercial_use: verify-current-terms
+  - id: nvidia-nim
+    adapter: adapters/openai-compatible/providers.ts
+    status: implemented
+    enabled: false
+    capabilities: [chat, vision]
+    endpoint: https://integrate.api.nvidia.com/v1
+    auth: bearer
+    credential_ref: env:NVIDIA_API_KEY
+    model_ref: env:NVIDIA_NIM_MODEL
+    pricing: credit-or-plan-dependent-not-guaranteed-free
+    commercial_use: verify-current-terms
+  - id: ollama-local
+    adapter: adapters/openai-compatible/providers.ts
+    status: implemented
+    enabled: false
+    capabilities: [chat, vision]
+    endpoint: http://127.0.0.1:11434/v1
+    auth: optional
+    model_ref: env:OLLAMA_LOCAL_MODEL
+    pricing: local-compute-electricity-and-hardware
+    commercial_use: model-license-dependent
+  - id: ollama-cloud
+    adapter: adapters/openai-compatible/providers.ts
+    status: implemented
+    enabled: false
+    capabilities: [chat, vision]
+    endpoint: https://ollama.com/v1
+    auth: bearer
+    credential_ref: env:OLLAMA_API_KEY
+    model_ref: env:OLLAMA_CLOUD_MODEL
+    pricing: verify-current-account-quota
+    commercial_use: verify-current-terms
+  - id: openrouter-image
+    adapter: adapters/openrouter/images.ts
+    status: implemented-opt-in
+    enabled: false
+    capabilities: [image]
+    endpoint: https://openrouter.ai/api/v1/images
+    auth: bearer
+    credential_ref: env:OPENROUTER_API_KEY
+    model_ref: env:OPENROUTER_IMAGE_MODEL
+    pricing: free-rate-limited-temporary-remove-2026-11-28
+    commercial_use: verify-current-terms
+  - id: opencode
+    status: deferred
     enabled: false
     capabilities: []
-    reason: Removed from active UCN plan by project decision; no fingerprint impersonation or undocumented public endpoint.
+    reason: Deferred by project owner.
+  - id: opencode-zen
+    status: deferred
+    enabled: false
+    capabilities: []
+    reason: Deferred by project owner.
