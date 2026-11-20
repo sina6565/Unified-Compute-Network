@@ -25,7 +25,7 @@ test("lastUserPrompt rejects an empty request", () => {
 
 test("provider adapters expose isolated IDs and capabilities", () => {
   assert.equal(new GroqAdapter().id, "groq");
-  assert.deepEqual(new GroqAdapter().capabilities, ["chat"]);
+  assert.deepEqual(new GroqAdapter().capabilities, ["chat", "vision"]);
   assert.equal(new GeminiAdapter().id, "gemini");
   assert.deepEqual(new GeminiAdapter().capabilities, ["chat", "vision"]);
   assert.equal(new PollinationsImageAdapter().id, "pollinations-image");
