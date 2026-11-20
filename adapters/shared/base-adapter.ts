@@ -1,8 +1,12 @@
 export type Capability = "chat" | "vision" | "image" | "audio" | "video" | "embeddings";
 
+export type NormalizedContentPart =
+  | { type: "text"; text: string }
+  | { type: "image_url"; image_url: { url: string; detail?: "auto" | "low" | "high" } };
+
 export interface NormalizedMessage {
   role: "system" | "user" | "assistant";
-  content: string;
+  content: string | NormalizedContentPart[];
 }
 
 export interface NormalizedRequest {
@@ -38,8 +42,10 @@ export function lastUserPrompt(request: NormalizedRequest): string {
   const fromPrompt = request.prompt?.trim();
   if (fromPrompt) return fromPrompt;
   const lastUser = [...(request.messages ?? [])].reverse().find((message) => message.role === "user");
-  if (!lastUser?.content?.trim()) {
-    throw new AdapterConfigurationError("A non-empty prompt or user message is required");
-  }
-  return lastUser.content;
+  if (typeof lastUser?.content === "string" && lastUser.content.trim()) return lastUser.content;
+  const text = Array.isArray(lastUser?.content)
+    ? lastUser.content.filter((part) => part.type === "text").map((part) => part.text).join("\n").trim()
+    : "";
+  if (!text) throw new AdapterConfigurationError("A non-empty prompt or user text part is required");
+  return text;
 }
