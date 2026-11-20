@@ -14,7 +14,7 @@ The adapters below are implemented but disabled by default. Free access is not g
 | NVIDIA NIM | Implemented | Chat + vision on compatible models | Credit/plan dependent; not guaranteed free |
 | Ollama Local | Implemented | Chat + vision if local model supports it | No hosted API fee; local compute required |
 | Ollama Cloud | Implemented | Chat + vision if selected model supports it | Account/quota dependent |
-| OpenRouter Image API | Implemented opt-in | Image generation | Paid unless a current $0 endpoint is verified |
+| OpenRouter Image API | Implemented opt-in | Image generation | Recraft V4.1 Flash V2 currently $0; rate-limited; scheduled removal 2026-11-28 |
 
 OpenCode and OpenCode Zen are deferred by owner instruction.
 
@@ -23,7 +23,7 @@ OpenCode and OpenCode Zen are deferred by owner instruction.
 - Image generation creates a new image. It is a separate adapter and endpoint.
 - Gemini accepts base64 image data URLs in this adapter. Remote URLs must first pass through a trusted upload/fetch flow; arbitrary URLs are not fetched by the adapter.
 - OpenRouter's current free-model list changes dynamically. Use `openrouter/free` for chat routing or pin a current model ID ending in `:free`; check input modalities before sending images.
-- Image generation through OpenRouter is not assumed free. Pollinations remains opt-in and its public availability/terms must be checked.
+- OpenRouter image generation currently has a temporary $0 Recraft endpoint, scheduled for removal on 2026-11-28; verify the live catalog before every use. Pollinations remains opt-in and its public availability/terms must be checked.
 
 ## Activation checklist
 1. Verify current official API docs, model ID, and modality support.
