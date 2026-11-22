@@ -4,6 +4,8 @@
 
 > **One network. Open participation. Shared compute.**
 
+![Unified Compute Network — a global, community-driven compute network](assets/ucn-hero.svg)
+
 Unified Compute Network (UCN) is an initiative within the **SINA AI STUDIO ecosystem**. Its vision is to bring independent AI providers, compute operators, infrastructure owners, developers, researchers, businesses, and users into one interoperable network.
 
 SINA AI STUDIO is the initiator of UCN. The network is intended to grow through open participation: providers can contribute services and resources, developers can build integrations, users can access competing services through a unified experience, and the global community can review and shape the architecture, economics, standards, and governance.
@@ -70,6 +72,15 @@ A possible end-to-end flow for discussion:
 6. Settlement, provider compensation, network fees, and any pool accounting follow transparent rules approved for the network.
 
 This is a conceptual flow. The complete protocol, verification model, settlement rules, and pool mechanics remain open for community design and testing.
+
+## Community questions — join the discussion
+
+We are opening the design process now. These first questions are invitations to developers, providers, researchers, and users—not decisions already made by the project.
+
+- [**Question 1: Which real-world workload should UCN solve first?**](https://github.com/sina6565/Unified-Compute-Network/issues/3)
+- [**Question 2: How should UCN compare and verify provider quality?**](https://github.com/sina6565/Unified-Compute-Network/issues/4)
+
+Add your evidence, alternatives, prototypes, and constructive criticism directly to the discussions. You do not need to agree with the initial vision to contribute.
 
 ## Join the community
 
