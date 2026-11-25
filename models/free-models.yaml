@@ -1,0 +1,32 @@
+version: 1
+source: OpenRouter live free-model catalog, checked 2026-11-20
+refresh_policy: verify-live-before-each-release
+models:
+  chat:
+    - id: openrouter/free
+      provider: openrouter
+      modalities: [text]
+      status: dynamic-free-router
+    - id: nvidia/nemotron-3.5-super-vl:free
+      provider: openrouter
+      modalities: [text, image, video]
+      status: free-rate-limited
+    - id: google/gemma-4-26b-a4b:free
+      provider: openrouter
+      modalities: [text, image, video]
+      status: free-rate-limited
+    - id: google/gemma-4-31b:free
+      provider: openrouter
+      modalities: [text, image]
+      status: free-rate-limited
+    - id: inclusionai/ling-3.2-flash:free
+      provider: openrouter
+      modalities: [text, image]
+      status: free-rate-limited
+  image_generation:
+    - id: recraft/recraft-v4.1-flash-v2:free
+      provider: openrouter
+      modalities: [text-to-image]
+      status: free-rate-limited-temporary
+      announced_removal: 2026-11-28
+      notes: Generation only; does not accept input images or style references.

@@ -4,7 +4,7 @@ const DEFAULT_BASE_URL = "https://api.groq.com/openai/v1";
 
 export class GroqAdapter implements ProviderAdapter {
   readonly id = "groq";
-  readonly capabilities = ["chat"] as const;
+  readonly capabilities = ["chat", "vision"] as const;
 
   async forward(request: NormalizedRequest): Promise<Response> {
     const apiKey = requireEnv("GROQ_API_KEY");
